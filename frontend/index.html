@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conex SAC</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="color.css" />
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-caja">
+    <div class="login-logo">
+      <i class="fa-solid fa-globe"></i>
+      <span>CONEX</span>
+    </div>
+    <h2 class="login-titulo">Bienvenido al Portal</h2>
+    <p class="login-sub">Ingrese sus credenciales para acceder</p>
+    <div class="login-error" id="login-error"></div>
+    <div class="campo">
+      <label>Usuario</label>
+      <input type="text" id="usuario" placeholder="Ej: admin" />
+    </div>
+    <div class="campo">
+      <label>Contraseña</label>
+      <div class="pass-grupo">
+        <input type="password" id="clave" placeholder="••••••••" />
+        <button class="ver-pass" onclick="verClave()">Ver</button>
+      </div>
+    </div>
+    <button class="btn-ingresar" onclick="ingresar()">
+      Inicia sesion mi rey 
+    </button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <div id="menu-capa" onclick="cerrarMenu()"></div>
+
+  <!-- MENÚ LATERAL -->
+  <aside id="menu">
+    <div class="menu-logo">
+      <div class="menu-logo-icono">
+        <i class="fa-solid fa-network-wired"></i>
+      </div>
+      <div>
+        <div class="menu-logo-nombre">Conex SAC</div>
+        <div class="menu-logo-sub">Telecomunicaciones</div>
+      </div>
+    </div>
+    <nav class="menu-nav">
+      <div class="menu-grupo">General</div>
+      <div class="menu-item activo" onclick="irA('panel', this)">
+        <i class="fa-solid fa-gauge-high"></i> Panel principal
+      </div>
+      <div class="menu-grupo">Equipos</div>
+      <div class="menu-item" onclick="irA('inventario', this)">
+        <i class="fa-solid fa-server"></i> Inventario
+      </div>
+      <div class="menu-item" onclick="irA('movimientos', this)">
+        <i class="fa-solid fa-right-left"></i> Movimientos
+      </div>
+      <div class="menu-grupo solo-admin">Administración</div>
+      <div class="menu-item solo-admin" onclick="irA('usuarios', this)">
+        <i class="fa-solid fa-users"></i> Usuarios
+      </div>
+      <div class="menu-item solo-admin" onclick="irA('reportes', this)">
+        <i class="fa-solid fa-chart-bar"></i> Reportes
+      </div>
+    </nav>
+    <div class="menu-usuario">
+      <div class="avatar" id="u-avatar">--</div>
+      <div style="flex:1; min-width:0;">
+        <div class="u-nombre" id="u-nombre">Usuario</div>
+        <div class="u-rol" id="u-rol">Rol</div>
+      </div>
+      <button class="btn-salir" onclick="salir()" title="Cerrar sesión">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ÁREA PRINCIPAL -->
+  <div id="principal">
+    <header id="barra-top">
+      <div class="top-izq">
+        <button id="btn-hamburguesa" onclick="toggleMenu()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <span id="titulo-seccion">Panel principal</span>
+      </div>
+      <button class="btn-accion oculto" id="btn-accion" onclick="abrirModal()">
+        <i class="fa-solid fa-plus"></i>
+        <span id="btn-accion-texto">Nuevo equipo</span>
+      </button>
+    </header>
+
+    <div id="zona">
+
+      <!-- PANEL PRINCIPAL -->
+      <div id="sec-panel" class="seccion activa">
+        <div class="fila-stats">
+          <div class="stat">
+            <div class="stat-etiq">Total equipos</div>
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-sub">En inventario</div>
+          </div>
+          <div class="stat">
+            <div class="stat-etiq">Activos</div>
+            <div class="stat-num" id="stat-activos" style="color:var(--verde-osc)">0</div>
+            <div class="stat-sub">Operativos</div>
+          </div>
+          <div class="stat">
+            <div class="stat-etiq">En reparación</div>
+            <div class="stat-num" id="stat-reparacion" style="color:var(--naranja-osc)">0</div>
+            <div class="stat-sub">En taller</div>
+          </div>
+          <div class="stat">
+            <div class="stat-etiq">Bajas</div>
+            <div class="stat-num" id="stat-bajas" style="color:var(--rojo-osc)">0</div>
+            <div class="stat-sub">Dados de baja</div>
+          </div>
+        </div>
+        <div class="fila-stats col3" style="margin-bottom:16px">
+          <div class="stat"><div class="stat-etiq">Entradas hoy</div><div class="stat-num" id="stat-entradas">0</div></div>
+          <div class="stat"><div class="stat-etiq">Salidas hoy</div><div class="stat-num" id="stat-salidas">0</div></div>
+          <div class="stat"><div class="stat-etiq">Sedes activas</div><div class="stat-num">3</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-cab">
+            <span class="panel-titulo">Últimos movimientos</span>
+          </div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr><th>Equipo</th><th>Tipo</th><th>Responsable</th><th>Fecha</th></tr>
+              </thead>
+              <tbody id="panel-movimientos"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVENTARIO -->
+      <div id="sec-inventario" class="seccion">
+        <div class="panel">
+          <div class="panel-cab">
+            <span class="panel-titulo">Equipos registrados</span>
+            <div class="busqueda">
+              <div class="campo-buscar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="inv-buscar" placeholder="Buscar equipo…" oninput="cargarEquipos()" />
+              </div>
+              <select class="filtro" id="inv-tipo" onchange="cargarEquipos()">
+                <option value="">Todos los tipos</option>
+                <option>Router</option>
+                <option>Switch</option>
+                <option>Firewall</option>
+                <option>Access Point</option>
+                <option>UPS</option>
+              </select>
+              <select class="filtro" id="inv-estado" onchange="cargarEquipos()">
+                <option value="">Todos los estados</option>
+                <option value="activo">Activo</option>
+                <option value="reparacion">En reparación</option>
+                <option value="baja">Baja</option>
+              </select>
+            </div>
+          </div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th><th>Tipo</th><th>Marca / Modelo</th>
+                  <th>N° Serie</th><th>Sede origen</th>
+                  <th>Responsable</th><th>Estado</th><th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="inv-tabla"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOVIMIENTOS -->
+      <div id="sec-movimientos" class="seccion">
+        <div class="panel">
+          <div class="panel-cab">
+            <span class="panel-titulo">Entradas y salidas de equipos</span>
+            <div class="busqueda">
+              <div class="campo-buscar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="mov-buscar" placeholder="Buscar…" oninput="cargarMovimientos()" />
+              </div>
+              <select class="filtro" id="mov-filtro" onchange="cargarMovimientos()">
+                <option value="">Todos</option>
+                <option value="entrada">Entradas</option>
+                <option value="salida">Salidas</option>
+              </select>
+            </div>
+          </div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Equipo</th><th>Tipo</th>
+                  <th>Sede origen</th><th>Cliente</th>
+                  <th>Responsable</th><th>Fecha</th><th>Obs.</th>
+                </tr>
+              </thead>
+              <tbody id="mov-tabla"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- USUARIOS -->
+      <div id="sec-usuarios" class="seccion">
+        <div class="panel">
+          <div class="panel-cab">
+            <span class="panel-titulo">Gestión de usuarios</span>
+            <button class="btn" onclick="abrirModalUsuario()" style="margin-left:auto;">
+              <i class="fa-solid fa-plus"></i> Nuevo usuario
+            </button>
+          </div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Sede</th><th>Estado</th><th>Acciones</th></tr>
+              </thead>
+              <tbody id="usr-tabla"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- REPORTES -->
+      <div id="sec-reportes" class="seccion">
+        <div class="panel">
+          <div class="panel-cab">
+            <span class="panel-titulo">Reportes de Movimientos</span>
+            <div class="busqueda">
+              <div class="campo-buscar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="rep-buscar" placeholder="Buscar equipo…" oninput="cargarReportes()" />
+              </div>
+              <select class="filtro" id="rep-usuario" onchange="cargarReportes()">
+                <option value="">Todos los usuarios</option>
+              </select>
+              <select class="filtro" id="rep-tipo" onchange="cargarReportes()">
+                <option value="">Todos los tipos</option>
+                <option value="entrada">Entradas</option>
+                <option value="salida">Salidas</option>
+              </select>
+            </div>
+          </div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Usuario</th><th>Equipo</th><th>Tipo</th>
+                  <th>Cliente</th><th>Fecha</th><th>Obs.</th><th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="rep-tabla"></tbody>
+            </table>
+          </div>
+          <div style="padding:14px; display:flex; gap:10px; flex-wrap:wrap; border-top:1px solid var(--borde);">
+            <button class="btn" onclick="exportarExcel()"><i class="fa-solid fa-file-excel"></i> Exportar Excel</button>
+            <button class="btn" onclick="exportarPDF()"><i class="fa-solid fa-file-pdf"></i> Exportar PDF</button>
+            <button class="btn" onclick="imprimirReporte()"><i class="fa-solid fa-print"></i> Imprimir</button>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-fondo" onclick="cerrarModalFondo(event)">
+  <div class="modal">
+    <div class="modal-cab">
+      <span class="modal-titulo" id="modal-titulo">Registrar nuevo equipo</span>
+      <button class="btn-cerrar" onclick="cerrarModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <!-- Formulario: Equipo (Inventario) -->
+      <div id="form-equipo">
+        <div class="form-fila">
+          <div class="form-campo">
+            <label>Tipo de equipo</label>
+            <select id="eq-tipo" onchange="actualizarMarcas()">
+              <option value="">Selecciona...</option>
+              <option value="Router">Router</option>
+              <option value="Switch">Switch</option>
+              <option value="Firewall">Firewall</option>
+              <option value="Access Point">Access Point</option>
+              <option value="UPS">UPS</option>
+            </select>
+          </div>
+          <div class="form-campo">
+            <label>Estado</label>
+            <select id="eq-estado">
+              <option value="activo">Activo</option>
+              <option value="reparacion">En reparación</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-fila">
+          <div class="form-campo">
+            <label>Marca</label>
+            <select id="eq-marca" onchange="actualizarModelos()">
+              <option value="">Selecciona el tipo primero</option>
+            </select>
+          </div>
+          <div class="form-campo">
+            <label>Modelo</label>
+            <select id="eq-modelo">
+              <option value="">Selecciona la marca primero</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-campo">
+          <label>Sede de origen</label>
+          <select id="eq-sede">
+            <option value="">Selecciona la sede...</option>
+          </select>
+        </div>
+        <div class="form-campo">
+          <label>Número de serie</label>
+          <input type="text" id="eq-serie" placeholder="Ej: SN-88201A" />
+        </div>
+        <div class="form-campo">
+          <label>Procedencia / Cliente origen</label>
+          <input type="text" id="eq-procedencia" placeholder="Ej: Cliente ABC, Warehouse, Reparación, etc." />
+        </div>
+        <div class="form-campo">
+          <label>Observaciones</label>
+          <textarea id="eq-obs" placeholder="Notas adicionales…"></textarea>
+        </div>
+      </div>
+
+      <!-- Formulario: Movimiento -->
+      <div id="form-movimiento" style="display:none">
+        
+        <div class="form-fila">
+          <div class="form-campo">
+            <label>Tipo de movimiento</label>
+            <select id="mov-tipo" onchange="camposMov()">
+              <option value="entrada">Entrada (desde cliente)</option>
+              <option value="salida">Salida (hacia cliente)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════
+             ENTRADA: Crear equipo nuevo automáticamente
+        ════════════════════════════════════════ -->
+        <div id="campo-entrada" style="display:block">
+          <h4 style="margin:12px 0; font-size:13px; color:#666;">Registrar equipo nuevo que ingresa</h4>
+          
+          <div class="form-fila">
+            <div class="form-campo">
+              <label>Tipo de equipo</label>
+              <select id="mov-tipo-equipo" onchange="actualizarMarcasMovimiento()">
+                <option value="">Selecciona...</option>
+                <option value="Router">Router</option>
+                <option value="Switch">Switch</option>
+                <option value="Firewall">Firewall</option>
+                <option value="Access Point">Access Point</option>
+                <option value="UPS">UPS</option>
+              </select>
+            </div>
+            <div class="form-campo">
+              <label>Marca</label>
+              <select id="mov-marca" onchange="actualizarModelosMovimiento()">
+                <option value="">Selecciona el tipo primero</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-fila">
+            <div class="form-campo">
+              <label>Modelo</label>
+              <select id="mov-modelo">
+                <option value="">Selecciona la marca primero</option>
+              </select>
+            </div>
+            <div class="form-campo">
+              <label>Número de serie</label>
+              <input type="text" id="mov-serie-entrada" placeholder="Ej: SN-88201A" />
+            </div>
+          </div>
+
+          <div class="form-campo">
+            <label>Origen externo del equipo</label>
+            <input type="text" id="mov-cliente-origen" placeholder="Ej: Cliente ABC, Reparación, Almacén externo, etc." />
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════════
+             SALIDA: Buscar equipo existente en inventario
+        ════════════════════════════════════════ -->
+        <div id="campo-salida" style="display:none">
+          <h4 style="margin:12px 0; font-size:13px; color:#666;">Enviar equipo existente a cliente</h4>
+          
+          <div class="form-fila">
+            <div class="form-campo">
+              <label>Tipo de equipo</label>
+              <select id="mov-tipo-equipo-salida" onchange="actualizarMarcasMovimientoSalida()">
+                <option value="">Selecciona...</option>
+                <option value="Router">Router</option>
+                <option value="Switch">Switch</option>
+                <option value="Firewall">Firewall</option>
+                <option value="Access Point">Access Point</option>
+                <option value="UPS">UPS</option>
+              </select>
+            </div>
+            <div class="form-campo">
+              <label>Marca</label>
+              <select id="mov-marca-salida" onchange="actualizarModelosMovimientoSalida()">
+                <option value="">Selecciona el tipo primero</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-fila">
+            <div class="form-campo">
+              <label>Modelo</label>
+              <select id="mov-modelo-salida">
+                <option value="">Selecciona la marca primero</option>
+              </select>
+            </div>
+            <div class="form-campo">
+              <label>Número de serie</label>
+              <input type="text" id="mov-serie-salida" placeholder="Ej: SN-88201A (debe estar en inventario)" />
+            </div>
+          </div>
+
+          <div class="form-campo">
+            <label>Cliente destino</label>
+            <input type="text" id="mov-cliente-destino" placeholder="Nombre del cliente" />
+          </div>
+        </div>
+
+        <div class="form-campo">
+          <label>Observaciones</label>
+          <textarea id="mov-obs" placeholder="Motivo del movimiento…"></textarea>
+        </div>
+
+      </div>
+
+
+      <!-- Formulario: Editar Usuario -->
+      <div id="form-editar-usuario" style="display:none">
+        <div class="form-campo">
+          <label>Usuario (para login)</label>
+          <input type="text" id="editar-username" placeholder="Usuario para login" />
+        </div>
+        <div class="form-campo">
+          <label>Correo electrónico</label>
+          <input type="email" id="editar-email" placeholder="Correo actual" />
+        </div>
+        <div class="form-campo">
+          <label>Nueva contraseña (dejar en blanco para no cambiar)</label>
+          <input type="password" id="editar-password" placeholder="Dejar vacío si no quieres cambiar" />
+        </div>
+      </div>
+
+      <!-- Formulario: Crear Usuario -->
+      <div id="form-usuario" style="display:none">
+        <div class="form-campo">
+          <label>Nombre de usuario</label>
+          <input type="text" id="usr-username" placeholder="Ej: isabel" />
+        </div>
+        <div class="form-campo">
+          <label>Nombre completo</label>
+          <input type="text" id="usr-nombre" placeholder="Ej: Isabel García" />
+        </div>
+        <div class="form-campo">
+          <label>Correo electrónico</label>
+          <input type="email" id="usr-email" placeholder="Ej: isabel@conex.pe" />
+        </div>
+        <div class="form-fila">
+          <div class="form-campo">
+            <label>Rol</label>
+            <select id="usr-rol">
+              <option value="2">Logística</option>
+              <option value="1">Administrador</option>
+            </select>
+          </div>
+          <div class="form-campo">
+            <label>Sede</label>
+            <select id="usr-sede"></select>
+          </div>
+        </div>
+        <div class="form-campo">
+          <label>Contraseña temporal</label>
+          <input type="password" id="usr-password" placeholder="Contraseña inicial" />
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-pie">
+      <button class="btn" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-guardar" onclick="guardar()">
+        <i class="fa-solid fa-check"></i> Guardar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

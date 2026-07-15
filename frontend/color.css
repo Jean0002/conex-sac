@@ -1,0 +1,813 @@
+/* ============================================
+   VARIABLES - Colores principales
+   Si quieres cambiar un color, hazlo aquí
+   y se actualiza en toda la página.
+============================================ */
+:root {
+  --azul:       #091107;
+  --azul-osc:   #0C447C;
+  --azul-cl:    #E6F1FB;
+  --gris-osc:   #1a1a2e;
+  --gris-cl:    #f5f5f2;
+  --blanco:     #ffffff;
+  --borde:      #e0e0e0;
+  --texto:      #1a1a18;
+  --texto2:     #5f5e5a;
+  --texto3:     #9a9890;
+  --verde-cl:   #EAF3DE;
+  --verde-osc:  #3B6D11;
+  --rojo-cl:    #FCEBEB;
+  --rojo-osc:   #A32D2D;
+  --naranja-cl: #FAEEDA;
+  --naranja-osc:#854F0B;
+  --rosa-cl:    #FBEAF0;
+  --rosa-osc:   #993556;
+  --menu-w:     220px;
+}
+
+/* ============================================
+   RESET - Elimina estilos por defecto
+============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  color: var(--texto);
+  background: var(--gris-cl);
+}
+
+/* ============================================
+   LOGIN - Pantalla de inicio de sesión
+============================================ */
+
+/* Fondo con imagen - cambia la ruta de la imagen aquí */
+#login {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('img/telecomunicaciones.png');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Capa oscura sobre la imagen de fondo */
+#login::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.50);
+}
+
+/* Tarjeta blanca del formulario */
+.login-caja {
+  position: relative;
+  z-index: 1;
+  background: var(--blanco);
+  border-radius: 14px;
+  padding: 38px 32px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+
+  /* Animación al aparecer */
+  animation: aparecer 0.4s ease;
+}
+
+/* Animación de entrada de la tarjeta */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo CONEX */
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.login-logo i {
+  color: var(--azul);
+  font-size: 22px;
+}
+
+.login-logo span {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--azul);
+  letter-spacing: 3px;
+}
+
+/* Título y subtítulo */
+.login-titulo {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--gris-osc);
+  margin-bottom: 6px;
+}
+
+.login-sub {
+  font-size: 13px;
+  color: var(--texto3);
+  margin-bottom: 22px;
+}
+
+/* Botones para seleccionar rol */
+.roles {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.rol-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  background: var(--blanco);
+  font-size: 13px;
+  color: var(--texto2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Botón de rol seleccionado */
+.rol-btn.activo {
+  border-color: var(--azul);
+  color: var(--azul);
+  font-weight: 600;
+}
+
+/* Campos del formulario */
+.campo {
+  margin-bottom: 15px;
+}
+
+.campo label {
+  display: block;
+  font-size: 12px;
+  color: var(--texto2);
+  margin-bottom: 5px;
+}
+
+.campo input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--borde);
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.campo input:focus {
+  border-color: var(--azul);
+}
+
+/* Campo de contraseña con botón "Ver" */
+.pass-grupo {
+  position: relative;
+}
+
+.pass-grupo input {
+  padding-right: 50px;
+}
+
+.ver-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--azul);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+}
+
+/* Botón de ingresar */
+.btn-ingresar {
+  width: 100%;
+  padding: 13px;
+  background: var(--gris-osc);
+  color: var(--blanco);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.btn-ingresar:hover {
+  background: var(--azul);
+}
+
+
+/* ============================================
+   APP - Estructura principal después del login
+============================================ */
+
+/* Contenedor principal: menú a la izquierda, contenido a la derecha */
+#app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+/* ============================================
+   MENÚ LATERAL
+============================================ */
+
+#menu {
+  width: var(--menu-w);
+  background: var(--blanco);
+  border-right: 1px solid var(--borde);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  transition: transform 0.2s ease;
+}
+
+/* Logo en el menú */
+.menu-logo {
+  padding: 16px;
+  border-bottom: 1px solid var(--borde);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-logo-icono {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: var(--azul);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-logo-icono i { color: var(--blanco); font-size: 14px; }
+.menu-logo-nombre { font-size: 13px; font-weight: 600; }
+.menu-logo-sub { font-size: 10px; color: var(--texto3); }
+
+/* Navegación del menú */
+.menu-nav {
+  flex: 1;
+  padding: 8px 0;
+  overflow-y: auto;
+}
+
+/* Título de grupo (ej: "General", "Equipos") */
+.menu-grupo {
+  font-size: 10px;
+  color: var(--texto3);
+  padding: 10px 16px 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* Cada ítem del menú */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  color: var(--texto2);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.15s, color 0.15s;
+}
+
+.menu-item i {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}
+
+.menu-item:hover {
+  background: var(--gris-cl);
+  color: var(--texto);
+}
+
+/* Ítem activo (sección actual) */
+.menu-item.activo {
+  background: var(--azul-cl);
+  color: var(--azul);
+  border-left-color: var(--azul);
+  font-weight: 500;
+}
+
+/* Ítems solo visibles para el administrador */
+.solo-admin { display: none; }
+
+/* Información del usuario en la parte baja del menú */
+.menu-usuario {
+  border-top: 1px solid var(--borde);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Círculo con iniciales del usuario */
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--azul-cl);
+  color: var(--azul-osc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.u-nombre { font-size: 12px; font-weight: 500; }
+.u-rol    { font-size: 10px; color: var(--texto3); }
+
+/* Botón cerrar sesión */
+.btn-salir {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto3);
+  font-size: 15px;
+  transition: color 0.2s;
+}
+
+.btn-salir:hover { color: var(--rojo-osc); }
+
+/* Capa oscura detrás del menú en celular */
+#menu-capa {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 90;
+}
+
+
+/* ============================================
+   ÁREA PRINCIPAL DE CONTENIDO
+============================================ */
+
+#principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: var(--menu-w);
+  overflow: hidden;
+}
+
+/* Barra superior */
+#barra-top {
+  height: 52px;
+  background: var(--blanco);
+  border-bottom: 1px solid var(--borde);
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.top-izq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Botón hamburguesa - solo en celular */
+#btn-hamburguesa {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--texto2);
+}
+
+#titulo-seccion { font-size: 15px; font-weight: 500; }
+
+/* Botón de acción (Nuevo equipo, etc.) */
+.btn-accion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  background: var(--azul);
+  color: var(--blanco);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.btn-accion:hover { background: var(--azul-osc); }
+.btn-accion.oculto { display: none; }
+
+/* Zona de contenido con scroll */
+#zona {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+}
+
+
+/* ============================================
+   SECCIONES - Cada vista de la app
+============================================ */
+
+/* Todas ocultas por defecto */
+.seccion { display: none; }
+
+/* La sección activa se muestra */
+.seccion.activa { display: block; }
+
+
+/* ============================================
+   TARJETAS DE ESTADÍSTICAS
+============================================ */
+
+.fila-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+/* Variante de 3 columnas */
+.fila-stats.col3 { grid-template-columns: repeat(3, 1fr); }
+
+.stat {
+  background: var(--blanco);
+  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid var(--borde);
+
+  /* Animación al aparecer */
+  animation: subir 0.3s ease;
+}
+
+@keyframes subir {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.stat-etiq { font-size: 11px; color: var(--texto2); margin-bottom: 4px; }
+.stat-num  { font-size: 24px; font-weight: 600; }
+.stat-sub  { font-size: 10px; color: var(--texto3); margin-top: 2px; }
+
+
+/* ============================================
+   PANELES Y TABLAS
+============================================ */
+
+.panel {
+  background: var(--blanco);
+  border-radius: 10px;
+  border: 1px solid var(--borde);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+/* Cabecera del panel con título y búsqueda */
+.panel-cab {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--borde);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.panel-titulo { font-size: 13px; font-weight: 500; }
+
+/* Barra de búsqueda */
+.busqueda {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.campo-buscar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--gris-cl);
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  padding: 5px 10px;
+}
+
+.campo-buscar i { font-size: 12px; color: var(--texto3); }
+
+.campo-buscar input {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: var(--texto);
+  font-family: inherit;
+  width: 150px;
+}
+
+/* Selectores de filtro */
+.filtro {
+  background: var(--gris-cl);
+  border: 1px solid var(--borde);
+  border-radius: 7px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: var(--texto);
+  font-family: inherit;
+  outline: none;
+}
+
+/* Tabla con scroll horizontal en celular */
+.tabla-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+thead th {
+  padding: 9px 14px;
+  text-align: left;
+  font-size: 11px;
+  color: var(--texto2);
+  font-weight: 500;
+  background: var(--gris-cl);
+  border-bottom: 1px solid var(--borde);
+}
+
+tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--borde);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+/* Fila al pasar el mouse */
+tbody tr:hover {
+  background: var(--gris-cl);
+  transition: background 0.15s;
+}
+
+
+/* ============================================
+   ETIQUETAS DE ESTADO (badges)
+============================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.b-activo     { background: var(--verde-cl);   color: var(--verde-osc); }
+.b-reparacion { background: var(--naranja-cl);  color: var(--naranja-osc); }
+.b-baja       { background: var(--rojo-cl);     color: var(--rojo-osc); }
+.b-entrada    { background: var(--azul-cl);     color: var(--azul); }
+.b-salida     { background: var(--rosa-cl);     color: var(--rosa-osc); }
+.b-admin      { background: var(--azul-cl);     color: var(--azul); }
+.b-logistica  { background: var(--naranja-cl);  color: var(--naranja-osc); }
+
+
+/* ============================================
+   ÍCONO DE TIPO DE EQUIPO
+============================================ */
+
+.equipo-tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.equipo-tipo i { color: var(--texto3); font-size: 13px; }
+
+
+/* ============================================
+   BOTONES
+============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  border: 1px solid var(--borde);
+  background: var(--blanco);
+  color: var(--texto);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.btn:hover { background: var(--gris-cl); }
+
+/* Botón pequeño de ícono (editar, bloquear) */
+.btn-ico {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto3);
+  font-size: 14px;
+  padding: 3px 5px;
+  transition: color 0.15s;
+  border-radius: 5px;
+}
+
+.btn-ico:hover { color: var(--azul); background: var(--azul-cl); }
+.btn-ico.rojo:hover { color: var(--rojo-osc); background: var(--rojo-cl); }
+
+
+/* ============================================
+   MODAL - Ventana emergente
+============================================ */
+
+/* Fondo oscuro del modal */
+#modal-fondo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0,0,0,0.4);
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-fondo.abierto { display: flex; }
+
+/* Ventana blanca del modal */
+.modal {
+  background: var(--blanco);
+  border-radius: 12px;
+  border: 1px solid var(--borde);
+  width: 100%;
+  max-width: 430px;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 12px;
+
+  /* Animación de entrada */
+  animation: aparecer 0.25s ease;
+}
+
+.modal-cab {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--borde);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-titulo { font-size: 14px; font-weight: 500; }
+
+.btn-cerrar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--texto3);
+  transition: color 0.15s;
+}
+
+.btn-cerrar:hover { color: var(--rojo-osc); }
+
+.modal-body { padding: 16px 18px; }
+
+/* Campos del formulario en el modal */
+.form-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.form-campo { margin-bottom: 12px; }
+
+.form-campo label {
+  display: block;
+  font-size: 11px;
+  color: var(--texto2);
+  margin-bottom: 4px;
+}
+
+.form-campo input,
+.form-campo select,
+.form-campo textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--borde);
+  background: var(--gris-cl);
+  font-size: 12px;
+  color: var(--texto);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-campo input:focus,
+.form-campo select:focus,
+.form-campo textarea:focus {
+  border-color: var(--azul);
+}
+
+.form-campo textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.modal-pie {
+  padding: 12px 18px 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--borde);
+}
+
+/* Botón guardar del modal */
+.btn-guardar {
+  background: var(--azul);
+  color: var(--blanco);
+  border: none;
+  border-radius: 7px;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.btn-guardar:hover { background: var(--azul-osc); }
+
+
+/* ============================================
+   RESPONSIVE - Adaptación para celular
+============================================ */
+
+@media (max-width: 768px) {
+  /* Menú oculto fuera de la pantalla */
+  #menu { transform: translateX(-100%); }
+  #menu.abierto { transform: translateX(0); }
+  #menu-capa.abierto { display: block; }
+
+  /* Contenido ocupa todo el ancho */
+  #principal { margin-left: 0; }
+
+  /* Mostrar botón hamburguesa */
+  #btn-hamburguesa { display: block; }
+
+  /* Estadísticas en 2 columnas */
+  .fila-stats { grid-template-columns: repeat(2, 1fr); }
+  .fila-stats.col3 { grid-template-columns: repeat(2, 1fr); }
+
+  .panel-cab { flex-direction: column; align-items: flex-start; }
+  .busqueda { width: 100%; }
+  #zona { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  .fila-stats { grid-template-columns: 1fr 1fr; }
+  .form-fila { grid-template-columns: 1fr; }
+}
