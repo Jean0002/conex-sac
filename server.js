@@ -25,14 +25,14 @@ app.use(express.static(path.join(__dirname, 'frontend')));
 
 // ── Conexión a la base de datos ──────────────────────────
 const db = mysql.createPool({
-  host:     'localhost',
-  user:     'root',
-  password: 'admin',
-  database: 'conexsac',
+  host:     process.env.DB_HOST || 'localhost',
+  user:     process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'admin',
+  database: process.env.DB_NAME || 'conexsac',
+  port:     process.env.DB_PORT || 3306,
   waitForConnections: true,
   connectionLimit: 10,
 });
-
 
 // ── Función para verificar el token de sesión ────────────
 function verificarToken(req, res, next) {
