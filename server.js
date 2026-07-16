@@ -540,6 +540,5 @@ app.delete('/api/movimientos/:id', verificarToken, soloAdmin, async (req, res) =
 // ── Iniciar el servidor ──────────────────────────────────
 app.listen(PORT, () => {
   console.log(`\n✅ Conex SAC corriendo en http://localhost:${PORT}`);
-  console.log(`   Base de datos: conexsac @ localhost`);
-  console.log(`   Presiona Ctrl+C para detener\n`);
+  console.log(`   Base de datos: ${process.env.DB_NAME || 'conexsac'} @ ${process.env.DB_HOST || 'localhost'}`);
 });
