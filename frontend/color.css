@@ -456,7 +456,7 @@ html, body {
 .fila-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  gap: 90px;
   margin-bottom: 14px;
 }
 
