@@ -16,12 +16,12 @@
       <i class="fa-solid fa-globe"></i>
       <span>CONEX</span>
     </div>
-    <h2 class="login-titulo">Bienvenido</h2>
-    <p class="login-sub">Ingrese sus credenciales</p>
+    <h2 class="login-titulo">Bienvenido al Portal</h2>
+    <p class="login-sub">Ingrese sus credenciales para acceder</p>
     <div class="login-error" id="login-error"></div>
     <div class="campo">
       <label>Usuario</label>
-      <input type="text" id="usuario" placeholder="Usuario" />
+      <input type="text" id="usuario" placeholder="Ej: admin" />
     </div>
     <div class="campo">
       <label>Contraseña</label>
@@ -113,16 +113,16 @@
             <div class="stat-num" id="stat-activos" style="color:var(--verde-osc)">0</div>
             <div class="stat-sub">Operativos</div>
           </div>
-            <div class="stat">
-            <div class="stat-etiq">En reparación</div>
-            <div class="stat-num" id="stat-reparacion" style="color:var(--naranja-osc)">0</div>
-            <div class="stat-sub">En taller</div>
-              <div class="stat">
+          <div class="stat">
             <div class="stat-etiq">En reparación</div>
             <div class="stat-num" id="stat-reparacion" style="color:var(--naranja-osc)">0</div>
             <div class="stat-sub">En taller</div>
           </div>
-          
+          <div class="stat">
+            <div class="stat-etiq">Bajas</div>
+            <div class="stat-num" id="stat-bajas" style="color:var(--rojo-osc)">0</div>
+            <div class="stat-sub">Dados de baja</div>
+          </div>
         </div>
         <div class="fila-stats col3" style="margin-bottom:16px">
           <div class="stat"><div class="stat-etiq">Entradas hoy</div><div class="stat-num" id="stat-entradas">0</div></div>
@@ -165,8 +165,8 @@
               <select class="filtro" id="inv-estado" onchange="cargarEquipos()">
                 <option value="">Todos los estados</option>
                 <option value="activo">Activo</option>
-                <option value="reparacion">eparación</option>
-                
+                <option value="reparacion">En reparación</option>
+                <option value="baja">Baja</option>
               </select>
             </div>
           </div>
